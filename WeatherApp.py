@@ -101,6 +101,19 @@ class WeatherApp:
         result = self.collection.delete_many({"city": city})
         print(f"{result.deleted_count} record(s) deleted.")
 
+    def select_crude(self, city, state, country, weather_data):
+        delete_data = input("Would you like to save, read, or delete any data(s, r, or d): ")
+
+        if delete_data == 'S' or delete_data == 's':
+            self.save_weather_record(city, state, country, weather_data)
+
+        elif delete_data == 'R' or delete_data == 'r':
+            self.read_all_weather_records()
+
+        elif delete_data == 'D' or delete_data == 'd':
+            city_to_delete = input("Enter the city ")
+            self.delete_weather_record(city_to_delete)
+
     def predict_weather(self, city, state, country):
 
         if not self.data:
@@ -125,13 +138,13 @@ class WeatherApp:
             case "F" | "f":
                 temp_f = (temp_k * 9 / 5) - 459.67
                 print(self.determine_weather(weather_id, str(temp_f) + '°F', weather_description))
-                self.save_weather_record(city, state, country, weather_data)
             case "C" | "c":
                 temp_c = temp_k - 237.15
                 print(self.determine_weather(weather_id, str(temp_c) + '°C', weather_description))
-                self.save_weather_record(city, state, country, weather_data)
             case _:
                 raise ValueError("You need to enter f or c")
+            
+        self.select_crude(city, state, country, weather_data)
             
 
 if __name__ == "__main__":
@@ -148,10 +161,3 @@ if __name__ == "__main__":
 
     wa = WeatherApp(request)
     wa.predict_weather(city, state, country)
-    
-    delete_data = input("Any data would you like to delete?(Type Y for yes): ")
-
-    if delete_data == 'Y' or delete_data == 'y':
-        city_to_delete = input("Enter the city ")
-        wa.delete_weather_record(city_to_delete)
-    
