@@ -114,6 +114,9 @@ class WeatherApp:
             city_to_delete = input("Enter the city ")
             self.delete_weather_record(city_to_delete)
 
+        else:
+            return
+
     def predict_weather(self, city, state, country):
 
         if not self.data:
